@@ -1,0 +1,110 @@
+syntax="proto3";
+package reservations;
+import "google/api/annotations.proto";
+
+service Reservation {
+    rpc GetAllBooks (Empty) returns (GetAllBooksRes) {
+        option (google.api.http) = {
+            get: "/v1/books"
+        };
+    }
+
+    rpc GetBook (GetBookReq) returns (Book) {
+        option (google.api.http) = {
+            get: "/v1/books/{isbn}"
+        };
+    }
+
+    rpc Search (SearchReq) returns (SearchRes) {
+        option (google.api.http) = {
+            get: "/v1/search"
+        };
+    }
+
+    rpc AddBook (AddBookReq) returns (Empty) {
+        option (google.api.http) = {
+            post: "/v1/books",
+            body: "*"
+        };
+    }
+
+    rpc DeleteBook (DeleteBookReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/v1/books/{isbn}",
+            body: "*"
+        };
+    }
+
+    rpc ReserveBook (ReserveBookReq) returns (Empty) {
+        option (google.api.http) = {
+            put : "/v1/books/{isbn}/reserve"
+            body: "*"
+        };
+    }
+
+    rpc CheckoutBook (CheckoutBookReq) returns (Empty) {
+        option (google.api.http) = {
+            post : "/v1/books/{isbn}/checkout"
+            body: "*"
+        };
+    }
+
+    rpc ReturnBook (ReturnBookReq) returns (Empty) {
+        option (google.api.http) = {
+            post : "/v1/books/{isbn}/return"
+            body: "*"
+        };
+    }
+}
+
+message Empty {}
+
+// Add not null constraints?
+message Book {
+    string isbn = 1;
+    float lat = 2;
+    float lng = 3;
+    string library = 4;
+    // ISO 4217
+    float price = 5;
+}
+
+message GetAllBooksRes {
+    repeated Book books = 1;
+}
+
+message GetBookReq {string isbn = 1;}
+
+message ReturnBookReq {string isbn = 1;}
+
+message AddBookReq {Book book = 1;}
+
+message DeleteBookReq {string isbn = 1;}
+
+message ReserveBookReq {
+    string isbn = 1;
+
+    // Start and End times are ISO8601 format
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message CheckoutBookReq {
+    string isbn = 1;
+
+    // Start and End times are ISO8601 format
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message SearchReq {
+    float lat = 1;
+    float lng = 2;
+    float range = 3;
+  
+    // Start and End times are ISO8601 format
+    string startDate = 4;
+    string endDate = 5;
+  }
+
+message SearchRes { repeated Book books = 1; }

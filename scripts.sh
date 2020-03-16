@@ -1,0 +1,2 @@
+# Generate protobufs
+protoc -I. -I$GOPATH/src -I /Users/pranav/go/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis -I /Users/pranav/go/src/github.com/grpc-ecosystem/grpc-gateway --go_out=plugins=grpc:. --grpc-gateway_out=logtostderr=true,allow_delete_body=true:. protobufs/reservations.proto 
